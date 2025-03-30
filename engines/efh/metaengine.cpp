@@ -287,6 +287,7 @@ Common::KeymapArray EfhMetaEngine::initKeymaps(const char *target) const {
     act = new Action("ESC", _("ESC"));	// Should map in ESC into the game.
     act->setCustomEngineActionEvent(Efh::kEfhActionESC);
     act->addDefaultInputMapping("KEYCODE_ESCAPE");
+	act->addDefaultInputMapping("l");
     engineKeymap->addAction(act);
 
     act = new Action("C", _("C"));	// Should map in C into the game.
