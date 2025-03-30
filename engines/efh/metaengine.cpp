@@ -25,7 +25,9 @@
 #include "common/textconsole.h"
 #include "graphics/thumbnail.h"
 #include "graphics/surface.h"
-
+#include "backends/keymapper/action.h"
+#include "backends/keymapper/keymapper.h"
+#include "backends/keymapper/standard-actions.h"
 #include "efh/efh.h"
 
 namespace Efh {
@@ -190,6 +192,153 @@ SaveStateDescriptor EfhMetaEngine::querySaveMetaInfos(const char *target, int sl
 bool EfhMetaEngine::removeSaveState(const char *target, int slot) const {
 	Common::String fileName = Common::String::format("%s.%03d", target, slot);
 	return g_system->getSavefileManager()->removeSavefile(fileName);
+}
+
+Common::KeymapArray EfhMetaEngine::initKeymaps(const char *target) const {
+	using namespace Common;
+    using namespace Efh;
+
+    Keymap *engineKeymap = new Keymap(Keymap::kKeymapTypeGame, "efh-default", "Default keymappings");
+
+    Action *act;
+   
+    act = new Action("F1", _("Display Character Summary One"));	// This should map in F1 into the game to allow player to click on F1 to check CS(Character Summary) One.
+    act->setCustomEngineActionEvent(Efh::kEfhActionCharacterSummaryOne);
+    act->addDefaultInputMapping("F1");
+    act->addDefaultInputMapping("1");
+    engineKeymap->addAction(act);
+
+    act = new Action("F2", _("Display Character Summary Two"));	// Should map in F2 to allow player to click F2 to check CS Two.
+    act->setCustomEngineActionEvent(Efh::kEfhActionCharacterSummaryTwo);
+    act->addDefaultInputMapping("F2");
+    act->addDefaultInputMapping("2");
+    engineKeymap->addAction(act);
+
+    act = new Action("F3", _("Display Character Summary Three"));	// Should map in F3 to allow player to click F3 to check CS Three.
+    act->setCustomEngineActionEvent(Efh::kEfhActionCharacterSummaryThree);
+    act->addDefaultInputMapping("F3");
+    act->addDefaultInputMapping("3");
+    engineKeymap->addAction(act);
+
+    act = new Action("SAVE", _("Save game"));	// Should map in CTRL-s to allow player to Save the game. I am not sure if this would be the correct inputs to allow the usage of CTRL button For Save, Load, and Buffer.
+    act->setCustomEngineActionEvent(Efh::kEfhActionSave);
+    act->addDefaultInputMapping("LCTRL+s");
+	act->addDefaultInputMapping("RCTRL+s");
+    engineKeymap->addAction(act);
+
+    act = new Action("LOAD", _("Load game"));	// Should map in CTRL-l to allow player to Load the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionLoad);
+    act->addDefaultInputMapping("LCTRL+l");
+	act->addDefaultInputMapping("RCTRL+l");
+    engineKeymap->addAction(act);
+
+    act = new Action("Buffer", _("Buffer"));	// Should map in CTRL-b to allow player to turn Buffering on/off. Buffering is off by default. (Base on the online efh manual I found online.)
+    act->setCustomEngineActionEvent(Efh::kEfhActionBuffer);
+    act->addDefaultInputMapping("LCTRL+b");
+	act->addDefaultInputMapping("RCTRL+b");
+    engineKeymap->addAction(act);
+
+    act = new Action("Sound", _("Sound"));	// Should map in CTRL-o to allow player turn Sound on/off.
+    act->setCustomEngineActionEvent(Efh::kEfhActionSound);
+    act->addDefaultInputMapping("LCTRL+o");
+	act->addDefaultInputMapping("RCTRL+o");
+    engineKeymap->addAction(act);
+
+    act = new Action("Increase", _("Increase delay of combat text"));	// Should map in + to increase combat text delay.
+    act->setCustomEngineActionEvent(Efh::kEfhActionIncreaseCombatText);
+    act->addDefaultInputMapping("+");
+    engineKeymap->addAction(act);
+
+    act = new Action("Decrease", _("Decrease delay of combat text"));	// Should map in - to decrease combat text delay.
+    act->setCustomEngineActionEvent(Efh::kEfhActionDecreaseCombatText);
+    act->addDefaultInputMapping("-");
+    engineKeymap->addAction(act);
+
+    act = new Action("A", _("A"));	// Should map in A into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionA);
+    act->addDefaultInputMapping("a");
+    engineKeymap->addAction(act);
+
+    act = new Action("H",_( "H"));	// Should map in H into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionH);
+    act->addDefaultInputMapping("h");
+    engineKeymap->addAction(act);
+
+    act = new Action("D", _("D"));	// Should map in D into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionD);
+    act->addDefaultInputMapping("d");
+    engineKeymap->addAction(act);
+
+    act = new Action("R", _("R"));	// Should map in R into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionR);
+    act->addDefaultInputMapping("r");
+    engineKeymap->addAction(act);
+
+    act = new Action("S", _("S"));	// Should map in S into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionS);
+    act->addDefaultInputMapping("s");
+    engineKeymap->addAction(act);
+
+    act = new Action("T", _("T"));	// Should map in T into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionT);
+    act->addDefaultInputMapping("t");
+    engineKeymap->addAction(act);
+
+    act = new Action("ESC", _("ESC"));	// Should map in ESC into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionESC);
+    act->addDefaultInputMapping("KEYCODE_ESCAPE");
+    engineKeymap->addAction(act);
+
+    act = new Action("C", _("C"));	// Should map in C into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionC);
+    act->addDefaultInputMapping("c");
+    engineKeymap->addAction(act);
+
+    act = new Action("Movement down", _("goSouth"));	// Should map in down arrow and kp2 into movement down/goSouth.
+    act->setCustomEngineActionEvent(Efh::kEfhActionUp);
+    act->addDefaultInputMapping("KEYCODE_DOWN");
+    act->addDefaultInputMapping("KEYCODE_KP2");
+    engineKeymap->addAction(act);
+
+    act = new Action("Movement up", _("goNorth"));	// Should map in up arrow and kp8 into movement up/goNorth.
+    act->setCustomEngineActionEvent(Efh::kEfhActionDown);
+    act->addDefaultInputMapping("KEYCODE_UP");
+    act->addDefaultInputMapping("KEYCODE_KP8");
+    engineKeymap->addAction(act);
+
+    act = new Action("Movement right", _("goEast"));	// Should map in right arrow and kp6 into movement right/goEast.
+    act->setCustomEngineActionEvent(Efh::kEfhActionRight);
+    act->addDefaultInputMapping("KEYCODE_RIGHT");
+    act->addDefaultInputMapping("KEYCODE_KP6");
+    engineKeymap->addAction(act);
+
+    act = new Action("Movement left", _("goWest"));	// Should map in left arrow and kp4 into movement left/goWest.
+    act->setCustomEngineActionEvent(Efh::kEfhActionLeft);
+    act->addDefaultInputMapping("KEYCODE_LEFT");
+    act->addDefaultInputMapping("KEYCODE_KP4");
+    engineKeymap->addAction(act);
+
+	act = new Action("Movement Down left", _("goSouthEast"));	// Should map in kp1 into movement goSouthEast.
+    act->setCustomEngineActionEvent(Efh::kEfhActionDownLeft);
+    act->addDefaultInputMapping("KEYCODE_KP1");
+    engineKeymap->addAction(act);
+
+	act = new Action("Movement Up left", _("goNorthEast"));	// Should map in kp7 into movement goNorthEast.
+    act->setCustomEngineActionEvent(Efh::kEfhActionUpLeft);
+    act->addDefaultInputMapping("KEYCODE_KP7");
+    engineKeymap->addAction(act);
+
+	act = new Action("Movement Down Right", _("goSouthWest"));	// Should map in kp3 into movement goSouthWest.
+    act->setCustomEngineActionEvent(Efh::kEfhActionDownRight);
+    act->addDefaultInputMapping("KEYCODE_KP3");
+    engineKeymap->addAction(act);
+
+	act = new Action("Movement Up Right", _("goNorthWest"));	// Should map in kp9 into movement goNorthWest.
+    act->setCustomEngineActionEvent(Efh::kEfhActionUpRight);
+    act->addDefaultInputMapping("KEYCODE_KP9");
+    engineKeymap->addAction(act);
+
+    return Keymap::arrayOf(engineKeymap);
 }
 
 } // End of namespace Efh

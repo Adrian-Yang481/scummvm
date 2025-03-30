@@ -93,9 +93,103 @@ Common::Error EfhEngine::run() {
 			handleAnimations();
 		}
 
-		Common::Event event;
+		Common::Event event;	// I assume that I would need to use this to allow the game to check for the inputs from players to interact with the game.
 		Common::KeyCode retVal = getLastCharAfterAnimCount(4);
 
+		// I am not sure if using event would be correct but I notice that there is event that is defined here but the even is not being used at all within this run function.
+		// If needed I will edit this while function to keep in the retVal value to allow the game to check whenever the player have inputted their inputs into the game.
+		while (_eventMan->pollEvent(event)) {	// Attempting to allow the efh game engine to check if the player is currently using any mapped keys to interact with the game itself.
+			switch (event.type) {
+			case Common::EVENT_CUSTOM_BACKEND_ACTION_START:
+				if (event.customType == Efh::kEfhActionDown) {	// This should easily reduce the need for two case statments for down and keypad 2 button. Allows player to move down within the ingame map.
+					goSouth();
+					_imageSetSubFilesIdx = 144;
+				} else if (event.customType == Efh::kEfhActionUp) {	// This should allow the player to move up within the ingame map.
+					goNorth();
+					_imageSetSubFilesIdx = 145;
+				} else if (event.customType == Efh::kEfhActionRight) {	// This should allow the player to move right within the ingame map.
+					goEast();
+					_imageSetSubFilesIdx = 146;
+				} else if (event.customType == Efh::kEfhActionLeft) {	// This should allow the player to move left within the ingame map.
+					goWest();
+					_imageSetSubFilesIdx = 147;
+				} else if (event.customType == Efh::kEfhActionUpRight) {	// This should allow the player to move up right within the ingame map.
+					goNorthEast();
+					_imageSetSubFilesIdx = 146;
+				} else if (event.customType == Efh::kEfhActionDownRight) {	// This should allow the player to move down right within the ingame map.
+					goSouthEast();
+					_imageSetSubFilesIdx = 146;
+				} else if (event.customType == Efh::kEfhActionDownLeft) {	// This should allow the player to move down left within the ingame map.
+					goSouthWest();
+					_imageSetSubFilesIdx = 147;
+				} else if (event.customType == Efh::kEfhActionUpLeft) { // This should allow the player to move up left within the ingame map.
+					goNorthWest();
+					_imageSetSubFilesIdx = 147;
+				} else if (event.customType == Efh::kEfhActionCharacterSummaryOne) {	// This should allow player to open up Character Summary(CS) One.
+					if (_teamChar[0]._id != -1) {
+						handleStatusMenu(1, _teamChar[0]._id);
+						_tempTextPtr = nullptr;
+						drawGameScreenAndTempText(true);
+						_redrawNeededFl = true;
+					}
+				} else if (event.customType == Efh::kEfhActionCharacterSummaryTwo) {	// Should allow player to open up CS Two.
+					if (_teamChar[1]._id != -1) {
+						handleStatusMenu(1, _teamChar[1]._id);
+						_tempTextPtr = nullptr;
+						drawGameScreenAndTempText(true);
+						_redrawNeededFl = true;
+					}
+				} else if (event.customType == Efh::kEfhActionCharacterSummaryThree) {	// Should allow player to open up CS Three.
+					if (_teamChar[2]._id != -1) {
+						handleStatusMenu(1, _teamChar[2]._id);
+						_tempTextPtr = nullptr;
+						drawGameScreenAndTempText(true);
+						_redrawNeededFl = true;
+					}
+				} else if (event.customType == Efh::kEfhActionSave) {	// Should allow player to Save their game with CTRL-s input.
+					for (uint counter = 0; counter < 2; ++counter) {
+						clearBottomTextZone(0);
+						displayCenteredString("Are You Sure You Want To Save?", 24, 296, 160);
+						if (counter == 0)
+							displayFctFullScreen();
+					}
+					Common::KeyCode input = waitForKey();
+					if (input == Common::KEYCODE_y) {
+						displayMenuAnswerString("-> Yes <-", 24, 296, 169);
+						getInput(2);
+						saveGameDialog();
+					} else {
+						displayMenuAnswerString("-> No!!! <-", 24, 296, 169);
+						getInput(2);
+					}
+					clearBottomTextZone_2(0);
+					displayLowStatusScreen(true);
+		
+					} else if (event.customType == Efh::kEfhActionLoad) {	// Should allow player to Load their game with CTRL-l input.
+						for (uint counter = 0; counter < 2; ++counter) {
+							clearBottomTextZone(0);
+							displayCenteredString("Are You Sure You Want To Load?", 24, 296, 160);
+							if (counter == 0)
+								displayFctFullScreen();
+						}
+						Common::KeyCode input = waitForKey();
+						if (input == Common::KEYCODE_y) {
+							displayMenuAnswerString("-> Yes <-", 24, 296, 169);
+							getInput(2);
+							loadGameDialog();
+						} else {
+							displayMenuAnswerString("-> No!!! <-", 24, 296, 169);
+							getInput(2);
+						}
+						clearBottomTextZone_2(0);
+						displayLowStatusScreen(true);
+					}
+				} break;
+			
+			}
+
+		// I kept this switch function here for reference and because I do not have a copy of efh game to testrun my implementations to see if it's working.
+		// I assume that this switch function works so I'll use this function as reference onto how to implement the KeyMapping binds.
 		switch (retVal) {
 		case Common::KEYCODE_DOWN:
 		case Common::KEYCODE_KP2:
