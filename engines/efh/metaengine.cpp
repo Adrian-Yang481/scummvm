@@ -232,28 +232,6 @@ Common::KeymapArray EfhMetaEngine::initKeymaps(const char *target) const {
 	act->addDefaultInputMapping("RCTRL+l");
     engineKeymap->addAction(act);
 
-    act = new Action("Buffer", _("Buffer"));	// Should map in CTRL-b to allow player to turn Buffering on/off. Buffering is off by default. (Base on the online efh manual I found online.)
-    act->setCustomEngineActionEvent(Efh::kEfhActionBuffer);
-    act->addDefaultInputMapping("LCTRL+b");
-	act->addDefaultInputMapping("RCTRL+b");
-    engineKeymap->addAction(act);
-
-    act = new Action("Sound", _("Sound"));	// Should map in CTRL-o to allow player turn Sound on/off.
-    act->setCustomEngineActionEvent(Efh::kEfhActionSound);
-    act->addDefaultInputMapping("LCTRL+o");
-	act->addDefaultInputMapping("RCTRL+o");
-    engineKeymap->addAction(act);
-
-    act = new Action("Increase", _("Increase delay of combat text"));	// Should map in + to increase combat text delay.
-    act->setCustomEngineActionEvent(Efh::kEfhActionIncreaseCombatText);
-    act->addDefaultInputMapping("+");
-    engineKeymap->addAction(act);
-
-    act = new Action("Decrease", _("Decrease delay of combat text"));	// Should map in - to decrease combat text delay.
-    act->setCustomEngineActionEvent(Efh::kEfhActionDecreaseCombatText);
-    act->addDefaultInputMapping("-");
-    engineKeymap->addAction(act);
-
     act = new Action("A", _("A"));	// Should map in A into the game.
     act->setCustomEngineActionEvent(Efh::kEfhActionA);
     act->addDefaultInputMapping("a");
@@ -284,15 +262,19 @@ Common::KeymapArray EfhMetaEngine::initKeymaps(const char *target) const {
     act->addDefaultInputMapping("t");
     engineKeymap->addAction(act);
 
-    act = new Action("ESC", _("ESC"));	// Should map in ESC into the game.
-    act->setCustomEngineActionEvent(Efh::kEfhActionESC);
-    act->addDefaultInputMapping("KEYCODE_ESCAPE");
+	act = new Action("L", _("L"));	// Should map in L into the game.
+	act->setCustomBackendActionAxisEvent(Efh::kEfhActionL);
 	act->addDefaultInputMapping("l");
-    engineKeymap->addAction(act);
+	engineKeymap->addAction(act);
 
     act = new Action("C", _("C"));	// Should map in C into the game.
     act->setCustomEngineActionEvent(Efh::kEfhActionC);
     act->addDefaultInputMapping("c");
+    engineKeymap->addAction(act);
+
+    act = new Action("ESC", _("ESC"));	// Should map in ESC into the game.
+    act->setCustomEngineActionEvent(Efh::kEfhActionESC);
+    act->addDefaultInputMapping("KEYCODE_ESCAPE");
     engineKeymap->addAction(act);
 
     act = new Action("Movement down", _("goSouth"));	// Should map in down arrow and kp2 into movement down/goSouth.
@@ -321,22 +303,22 @@ Common::KeymapArray EfhMetaEngine::initKeymaps(const char *target) const {
 
 	act = new Action("Movement Down left", _("goSouthEast"));	// Should map in kp1 into movement goSouthEast.
     act->setCustomEngineActionEvent(Efh::kEfhActionDownLeft);
-    act->addDefaultInputMapping("KEYCODE_KP1");
+    act->addDefaultInputMapping("KEYCODE_END");
     engineKeymap->addAction(act);
 
 	act = new Action("Movement Up left", _("goNorthEast"));	// Should map in kp7 into movement goNorthEast.
     act->setCustomEngineActionEvent(Efh::kEfhActionUpLeft);
-    act->addDefaultInputMapping("KEYCODE_KP7");
+    act->addDefaultInputMapping("KEYCODE_HOME");
     engineKeymap->addAction(act);
 
 	act = new Action("Movement Down Right", _("goSouthWest"));	// Should map in kp3 into movement goSouthWest.
     act->setCustomEngineActionEvent(Efh::kEfhActionDownRight);
-    act->addDefaultInputMapping("KEYCODE_KP3");
+    act->addDefaultInputMapping("KEYCODE_PAGEDOWN");
     engineKeymap->addAction(act);
 
 	act = new Action("Movement Up Right", _("goNorthWest"));	// Should map in kp9 into movement goNorthWest.
     act->setCustomEngineActionEvent(Efh::kEfhActionUpRight);
-    act->addDefaultInputMapping("KEYCODE_KP9");
+    act->addDefaultInputMapping("KEYCODE_PAGEUP");
     engineKeymap->addAction(act);
 
     return Keymap::arrayOf(engineKeymap);

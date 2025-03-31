@@ -93,172 +93,64 @@ Common::Error EfhEngine::run() {
 			handleAnimations();
 		}
 
-		Common::Event event;	// I assume that I would need to use this to allow the game to check for the inputs from players to interact with the game.
+		Common::Event event;
 		Common::KeyCode retVal = getLastCharAfterAnimCount(4);
 
-		// I am not sure if using event would be correct but I notice that there is event that is defined here but the even is not being used at all within this run function.
-		// If needed I will edit this while function to keep in the retVal value to allow the game to check whenever the player have inputted their inputs into the game.
-		while (_eventMan->pollEvent(event)) {	// Attempting to allow the efh game engine to check if the player is currently using any mapped keys to interact with the game itself.
-			switch (event.type) {
-			case Common::EVENT_CUSTOM_BACKEND_ACTION_START:
-				if (event.customType == Efh::kEfhActionDown) {	// This should easily reduce the need for two case statments for down and keypad 2 button. Allows player to move down within the ingame map.
-					goSouth();
-					_imageSetSubFilesIdx = 144;
-				} else if (event.customType == Efh::kEfhActionUp) {	// This should allow the player to move up within the ingame map.
-					goNorth();
-					_imageSetSubFilesIdx = 145;
-				} else if (event.customType == Efh::kEfhActionRight) {	// This should allow the player to move right within the ingame map.
-					goEast();
-					_imageSetSubFilesIdx = 146;
-				} else if (event.customType == Efh::kEfhActionLeft) {	// This should allow the player to move left within the ingame map.
-					goWest();
-					_imageSetSubFilesIdx = 147;
-				} else if (event.customType == Efh::kEfhActionUpRight) {	// This should allow the player to move up right within the ingame map.
-					goNorthEast();
-					_imageSetSubFilesIdx = 146;
-				} else if (event.customType == Efh::kEfhActionDownRight) {	// This should allow the player to move down right within the ingame map.
-					goSouthEast();
-					_imageSetSubFilesIdx = 146;
-				} else if (event.customType == Efh::kEfhActionDownLeft) {	// This should allow the player to move down left within the ingame map.
-					goSouthWest();
-					_imageSetSubFilesIdx = 147;
-				} else if (event.customType == Efh::kEfhActionUpLeft) { // This should allow the player to move up left within the ingame map.
-					goNorthWest();
-					_imageSetSubFilesIdx = 147;
-				} else if (event.customType == Efh::kEfhActionCharacterSummaryOne) {	// This should allow player to open up Character Summary(CS) One.
-					if (_teamChar[0]._id != -1) {
-						handleStatusMenu(1, _teamChar[0]._id);
-						_tempTextPtr = nullptr;
-						drawGameScreenAndTempText(true);
-						_redrawNeededFl = true;
-					}
-				} else if (event.customType == Efh::kEfhActionCharacterSummaryTwo) {	// Should allow player to open up CS Two.
-					if (_teamChar[1]._id != -1) {
-						handleStatusMenu(1, _teamChar[1]._id);
-						_tempTextPtr = nullptr;
-						drawGameScreenAndTempText(true);
-						_redrawNeededFl = true;
-					}
-				} else if (event.customType == Efh::kEfhActionCharacterSummaryThree) {	// Should allow player to open up CS Three.
-					if (_teamChar[2]._id != -1) {
-						handleStatusMenu(1, _teamChar[2]._id);
-						_tempTextPtr = nullptr;
-						drawGameScreenAndTempText(true);
-						_redrawNeededFl = true;
-					}
-				} else if (event.customType == Efh::kEfhActionSave) {	// Should allow player to Save their game with CTRL-s input.
-					for (uint counter = 0; counter < 2; ++counter) {
-						clearBottomTextZone(0);
-						displayCenteredString("Are You Sure You Want To Save?", 24, 296, 160);
-						if (counter == 0)
-							displayFctFullScreen();
-					}
-					Common::KeyCode input = waitForKey();
-					if (input == Common::KEYCODE_y) {
-						displayMenuAnswerString("-> Yes <-", 24, 296, 169);
-						getInput(2);
-						saveGameDialog();
-					} else {
-						displayMenuAnswerString("-> No!!! <-", 24, 296, 169);
-						getInput(2);
-					}
-					clearBottomTextZone_2(0);
-					displayLowStatusScreen(true);
-		
-					} else if (event.customType == Efh::kEfhActionLoad) {	// Should allow player to Load their game with CTRL-l input.
-						for (uint counter = 0; counter < 2; ++counter) {
-							clearBottomTextZone(0);
-							displayCenteredString("Are You Sure You Want To Load?", 24, 296, 160);
-							if (counter == 0)
-								displayFctFullScreen();
-						}
-						Common::KeyCode input = waitForKey();
-						if (input == Common::KEYCODE_y) {
-							displayMenuAnswerString("-> Yes <-", 24, 296, 169);
-							getInput(2);
-							loadGameDialog();
-						} else {
-							displayMenuAnswerString("-> No!!! <-", 24, 296, 169);
-							getInput(2);
-						}
-						clearBottomTextZone_2(0);
-						displayLowStatusScreen(true);
-					}
-				} break;
-			
-			}
-
-		// I kept this switch function here for reference and because I do not have a copy of efh game to testrun my implementations to see if it's working.
-		// I assume that this switch function works so I'll use this function as reference onto how to implement the KeyMapping binds.
 		switch (retVal) {
-		case Common::KEYCODE_DOWN:
-		case Common::KEYCODE_KP2:
+		case Efh::kEfhActionDown:	// This should allow the player to move down within the ingame map. Using both down and numbpad 2.
 			goSouth();
 			_imageSetSubFilesIdx = 144;
 			break;
-		case Common::KEYCODE_UP:
-		case Common::KEYCODE_KP8:
+		case Efh::kEfhActionUp:	// This should allow the player to move up within the ingame map. Using both up and numbpad 8.
 			goNorth();
 			_imageSetSubFilesIdx = 145;
 			break;
-		case Common::KEYCODE_RIGHT:
-		case Common::KEYCODE_KP6:
+		case Efh::kEfhActionRight:	// This should allow the player to move right within the ingame map.
 			goEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Common::KEYCODE_LEFT:
-		case Common::KEYCODE_KP4:
+		case Efh::kEfhActionLeft:	// This should allow the player to move left within the ingame map.
 			goWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Common::KEYCODE_PAGEUP:
-		case Common::KEYCODE_KP9:
+		case Efh::kEfhActionUpRight:	// This should allow the player to move up right within the ingame map.
 			goNorthEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Common::KEYCODE_PAGEDOWN:
-		case Common::KEYCODE_KP3:
+		case Efh::kEfhActionDownRight:	// This should allow the player to move down right within the ingame map.
 			goSouthEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Common::KEYCODE_END:
-		case Common::KEYCODE_KP1:
+		case Efh::kEfhActionDownLeft:	// This should allow the player to move down left within the ingame map.
 			goSouthWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Common::KEYCODE_HOME:
-		case Common::KEYCODE_KP7:
+		case Efh::kEfhActionUpLeft:	// This should allow the player to move up left within the ingame map.
 			goNorthWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Common::KEYCODE_1:
-		case Common::KEYCODE_F1:
+		case Efh::kEfhActionCharacterSummaryOne:	// This should allow player to open up Character Summary(CS) One.
 			if (_teamChar[0]._id != -1) {
 				handleStatusMenu(1, _teamChar[0]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
-			}
-			break;
-		case Common::KEYCODE_2:
-		case Common::KEYCODE_F2:
+			} break;
+		case Efh::kEfhActionCharacterSummaryTwo:	// Should allow player to open up CS Two.
 			if (_teamChar[1]._id != -1) {
 				handleStatusMenu(1, _teamChar[1]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
-			}
-			break;
-		case Common::KEYCODE_3:
-		case Common::KEYCODE_F3:
+			} break;
+		case Efh::kEfhActionCharacterSummaryThree:	// Should allow player to open up CS Three.
 			if (_teamChar[2]._id != -1) {
 				handleStatusMenu(1, _teamChar[2]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
-			}
-			break;
-		case Common::KEYCODE_F5: { // Original is using CTRL-S, which is mapped to F5 in utils
+			} break;
+		case Efh::kEfhActionSave: { // Modify so that this should work with CTRL-s instead of needing to use F5 input.
 			for (uint counter = 0; counter < 2; ++counter) {
 				clearBottomTextZone(0);
 				displayCenteredString("Are You Sure You Want To Save?", 24, 296, 160);
@@ -276,10 +168,8 @@ Common::Error EfhEngine::run() {
 			}
 			clearBottomTextZone_2(0);
 			displayLowStatusScreen(true);
-
-			}
-			break;
-		case Common::KEYCODE_F7: { // Original is using CTRL-L, which is mapped to F7 in utils
+		} break;
+		case Efh::kEfhActionLoad: { // Modifed so that this should work with CTRL-l instead of needing to use F6 input.
 			for (uint counter = 0; counter < 2; ++counter) {
 				clearBottomTextZone(0);
 				displayCenteredString("Are You Sure You Want To Load?", 24, 296, 160);
@@ -297,7 +187,6 @@ Common::Error EfhEngine::run() {
 			}
 			clearBottomTextZone_2(0);
 			displayLowStatusScreen(true);
-
 		} break;
 
 		// debug cases to test sound
@@ -405,7 +294,7 @@ void EfhEngine::playIntro() {
 	loadImageSet(63, _circleImageBuf, _circleImageSubFileArray, _decompBuf);
 	readImpFile(100, false);
 	Common::KeyCode lastInput = getLastCharAfterAnimCount(8);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	// With GF on the bed
@@ -416,7 +305,7 @@ void EfhEngine::playIntro() {
 	drawText(_imp2PtrArray[0], 6, 150, 268, 186, false);
 
 	lastInput = getLastCharAfterAnimCount(80);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	// Poof
@@ -428,7 +317,7 @@ void EfhEngine::playIntro() {
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
 	drawText(_imp2PtrArray[1], 6, 150, 268, 186, false);
 	lastInput = getLastCharAfterAnimCount(80);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	// On the phone
@@ -440,7 +329,7 @@ void EfhEngine::playIntro() {
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
 	drawText(_imp2PtrArray[2], 6, 150, 268, 186, false);
 	lastInput = getLastCharAfterAnimCount(80);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
@@ -449,7 +338,7 @@ void EfhEngine::playIntro() {
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
 	drawText(_imp2PtrArray[3], 6, 150, 268, 186, false);
 	lastInput = getLastCharAfterAnimCount(80);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
@@ -458,7 +347,7 @@ void EfhEngine::playIntro() {
 	displayRawDataAtPos(_circleImageSubFileArray[0], 0, 144);
 	drawText(_imp2PtrArray[4], 6, 150, 268, 186, false);
 	lastInput = getLastCharAfterAnimCount(80);
-	if (lastInput == Common::KEYCODE_ESCAPE)
+	if (lastInput == Efh::kEfhActionESC)
 		return;
 
 	displayRawDataAtPos(_circleImageSubFileArray[3], 110, 16);
@@ -539,7 +428,7 @@ void EfhEngine::initEngine() {
 	if (_loadSaveSlot == -1)
 		lastInput = playSong(_titleSong);
 
-	if (lastInput != Common::KEYCODE_ESCAPE && _loadSaveSlot == -1)
+	if (lastInput != Efh::kEfhActionESC && _loadSaveSlot == -1)
 		playIntro();
 
 	loadImageSet(6, _circleImageBuf, _circleImageSubFileArray, _decompBuf);
@@ -965,40 +854,40 @@ void EfhEngine::handleWinSequence() {
 
 	Common::KeyCode input = Common::KEYCODE_INVALID;
 
-	while (input != Common::KEYCODE_ESCAPE && !shouldQuitGame()) {
+	while (input != Efh::kEfhActionESC && !shouldQuitGame()) {
 		displayRawDataAtPos(winSeqSubFilesArray1[0], 0, 0);
 		displayFctFullScreen();
 		displayRawDataAtPos(winSeqSubFilesArray1[0], 0, 0);
 		input = getInput(32);
-		if (input != Common::KEYCODE_ESCAPE) {
+		if (input != Efh::kEfhActionESC) {
 			displayRawDataAtPos(winSeqSubFilesArray2[10], 136, 72);
 			displayFctFullScreen();
 			displayRawDataAtPos(winSeqSubFilesArray2[10], 136, 72);
 			input = getInput(1);
 		}
 
-		if (input != Common::KEYCODE_ESCAPE) {
+		if (input != Efh::kEfhActionESC) {
 			displayRawDataAtPos(winSeqSubFilesArray2[11], 136, 72);
 			displayFctFullScreen();
 			displayRawDataAtPos(winSeqSubFilesArray2[11], 136, 72);
 			input = getInput(1);
 		}
 
-		if (input != Common::KEYCODE_ESCAPE) {
+		if (input != Efh::kEfhActionESC) {
 			displayRawDataAtPos(winSeqSubFilesArray2[12], 136, 72);
 			displayFctFullScreen();
 			displayRawDataAtPos(winSeqSubFilesArray2[12], 136, 72);
 			input = getInput(1);
 		}
 
-		if (input != Common::KEYCODE_ESCAPE) {
+		if (input != Efh::kEfhActionESC) {
 			displayRawDataAtPos(winSeqSubFilesArray2[13], 136, 72);
 			displayFctFullScreen();
 			displayRawDataAtPos(winSeqSubFilesArray2[13], 136, 72);
 			input = getInput(1);
 		}
 
-		if (input != Common::KEYCODE_ESCAPE) {
+		if (input != Efh::kEfhActionESC) {
 			displayRawDataAtPos(winSeqSubFilesArray2[14], 136, 72);
 			displayFctFullScreen();
 			displayRawDataAtPos(winSeqSubFilesArray2[14], 136, 72);
@@ -1043,11 +932,11 @@ int16 EfhEngine::chooseCharacterToReplace() {
 	Common::KeyCode input;
 	for (;;) {
 		input = waitForKey();
-		if (input == Common::KEYCODE_ESCAPE || input == Common::KEYCODE_0 || (input > Common::KEYCODE_1 && input < maxVal))
+		if (input == Efh::kEfhActionESC || input == Common::KEYCODE_0 || (input > Common::KEYCODE_1 && input < maxVal))
 			break;
 	}
 
-	if (input == Common::KEYCODE_ESCAPE || input == Common::KEYCODE_0)
+	if (input == Efh::kEfhActionESC || input == Common::KEYCODE_0)
 		return 0x1B;
 
 	return (int16)input - (int16)Common::KEYCODE_1;
@@ -2421,11 +2310,11 @@ int16 EfhEngine::selectOtherCharFromTeam() {
 	Common::KeyCode input = Common::KEYCODE_INVALID;
 	for (;;) {
 		input = waitForKey();
-		if (input == Common::KEYCODE_ESCAPE || (input >= Common::KEYCODE_0 && input <= maxVal))
+		if (input == Efh::kEfhActionESC || (input >= Common::KEYCODE_0 && input <= maxVal))
 			break;
 	}
 
-	if (input == Common::KEYCODE_ESCAPE || input == Common::KEYCODE_0)
+	if (input == Efh::kEfhActionESC || input == Common::KEYCODE_0)
 		return 0x1B;
 
 	return (int16)input - (int16)Common::KEYCODE_1;
@@ -2518,46 +2407,24 @@ bool EfhEngine::checkMonsterCollision() {
 			Common::KeyCode input = mapInputCode(waitForKey());
 
 			switch (input) {
-			if (input == kEfhActionA) { // I am not sure if this would be correct or not formatting within the code. This should let player to click on a to interact with Attack option.
-				handleFight(monsterId);
-				endLoop = true;
-				break;
-			} else if (input == kEfhActionESC) {	// Should be able to use both l and ESC to start Leave option.
-				endLoop = true;
-				break;
-			} else if (input == kEfhActionS) {	// Should let player to click on s to interact with Status option.
-				handleStatusMenu(1, _teamChar[0]._id);
-				endLoop = true;
-				_tempTextPtr = nullptr;
-				drawGameScreenAndTempText(true);
-				break;
-			} else if (input == kEfhActionT) {	// Should let player to click on t to interact with Talk option.
-				startTalkMenu(monsterId);
-				endLoop = true;
-				break;
-			}
-	
-			// Leaving this here to delete later once I understand more about how to implement Keymapping within this efh.cpp file.
-			case Common::KEYCODE_a: // Attack
-				handleFight(monsterId);
-				endLoop = true;
-				break;
-			case Common::KEYCODE_ESCAPE:
-			case Common::KEYCODE_l: // Leave
-				endLoop = true;
-				break;
-			case Common::KEYCODE_s: // Status
-				handleStatusMenu(1, _teamChar[0]._id);
-				endLoop = true;
-				_tempTextPtr = nullptr;
-				drawGameScreenAndTempText(true);
-				break;
-			case Common::KEYCODE_t: // Talk
-				startTalkMenu(monsterId);
-				endLoop = true;
-				break;
-			default:
-				break;
+				if (input == kEfhActionA) { // Attack
+					handleFight(monsterId);
+					endLoop = true;
+					break;
+				} else if (input == kEfhActionL || input == Efh::kEfhActionESC) {	// Leave
+					endLoop = true;
+					break;
+				} else if (input == kEfhActionS) {	// Status
+					handleStatusMenu(1, _teamChar[0]._id);
+					endLoop = true;
+					_tempTextPtr = nullptr;
+					drawGameScreenAndTempText(true);
+					break;
+				} else if (input == kEfhActionT) {	// Talk
+					startTalkMenu(monsterId);
+					endLoop = true;
+					break;
+				}
 			}
 		} while (!endLoop && !shouldQuitGame());
 		return false;
