@@ -97,60 +97,83 @@ Common::Error EfhEngine::run() {
 		Common::KeyCode retVal = getLastCharAfterAnimCount(4);
 
 		switch (retVal) {
-		case Efh::kEfhActionDown:	// This should allow the player to move down within the ingame map. Using both down and numbpad 2.
+		// This should allow the player to move down within the ingame map. Using both down and numbpad 2.
+		case Efh::kEfhActionDown:
 			goSouth();
 			_imageSetSubFilesIdx = 144;
 			break;
-		case Efh::kEfhActionUp:	// This should allow the player to move up within the ingame map. Using both up and numbpad 8.
+
+		// This should allow the player to move up within the ingame map. Using both up and numbpad 8.
+		case Efh::kEfhActionUp:
 			goNorth();
 			_imageSetSubFilesIdx = 145;
 			break;
-		case Efh::kEfhActionRight:	// This should allow the player to move right within the ingame map.
+
+		// This should allow the player to move right within the ingame map.
+		case Efh::kEfhActionRight:
 			goEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Efh::kEfhActionLeft:	// This should allow the player to move left within the ingame map.
+
+		// This should allow the player to move left within the ingame map.
+		case Efh::kEfhActionLeft:
 			goWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Efh::kEfhActionUpRight:	// This should allow the player to move up right within the ingame map.
+
+		// This should allow the player to move up right within the ingame map.
+		case Efh::kEfhActionUpRight:
 			goNorthEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Efh::kEfhActionDownRight:	// This should allow the player to move down right within the ingame map.
+
+		// This should allow the player to move down right within the ingame map.
+		case Efh::kEfhActionDownRight:
 			goSouthEast();
 			_imageSetSubFilesIdx = 146;
 			break;
-		case Efh::kEfhActionDownLeft:	// This should allow the player to move down left within the ingame map.
+
+		// This should allow the player to move down left within the ingame map.
+		case Efh::kEfhActionDownLeft:
 			goSouthWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Efh::kEfhActionUpLeft:	// This should allow the player to move up left within the ingame map.
+
+		// This should allow the player to move up left within the ingame map.
+		case Efh::kEfhActionUpLeft:
 			goNorthWest();
 			_imageSetSubFilesIdx = 147;
 			break;
-		case Efh::kEfhActionCharacterSummaryOne:	// This should allow player to open up Character Summary(CS) One.
+
+		// This should allow player to open up Character Summary(CS) One.
+		case Efh::kEfhActionCharacterSummaryOne:
 			if (_teamChar[0]._id != -1) {
 				handleStatusMenu(1, _teamChar[0]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
 			} break;
-		case Efh::kEfhActionCharacterSummaryTwo:	// Should allow player to open up CS Two.
+
+		// Should allow player to open up CS Two.
+		case Efh::kEfhActionCharacterSummaryTwo:
 			if (_teamChar[1]._id != -1) {
 				handleStatusMenu(1, _teamChar[1]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
 			} break;
-		case Efh::kEfhActionCharacterSummaryThree:	// Should allow player to open up CS Three.
+
+		// Should allow player to open up CS Three.
+		case Efh::kEfhActionCharacterSummaryThree:
 			if (_teamChar[2]._id != -1) {
 				handleStatusMenu(1, _teamChar[2]._id);
 				_tempTextPtr = nullptr;
 				drawGameScreenAndTempText(true);
 				_redrawNeededFl = true;
 			} break;
-		case Efh::kEfhActionSave: { // Modify so that this should work with CTRL-s instead of needing to use F5 input.
+
+		// Modify so that this should work with CTRL-s instead of needing to use F5 input.
+		case Efh::kEfhActionSave: {
 			for (uint counter = 0; counter < 2; ++counter) {
 				clearBottomTextZone(0);
 				displayCenteredString("Are You Sure You Want To Save?", 24, 296, 160);
@@ -169,7 +192,9 @@ Common::Error EfhEngine::run() {
 			clearBottomTextZone_2(0);
 			displayLowStatusScreen(true);
 		} break;
-		case Efh::kEfhActionLoad: { // Modifed so that this should work with CTRL-l instead of needing to use F6 input.
+
+		// Modifed so that this should work with CTRL-l instead of needing to use F6 input.
+		case Efh::kEfhActionLoad: {
 			for (uint counter = 0; counter < 2; ++counter) {
 				clearBottomTextZone(0);
 				displayCenteredString("Are You Sure You Want To Load?", 24, 296, 160);
@@ -2407,20 +2432,27 @@ bool EfhEngine::checkMonsterCollision() {
 			Common::KeyCode input = mapInputCode(waitForKey());
 
 			switch (input) {
-				if (input == kEfhActionA) { // Attack
+				// Attack
+				if (input == Efh::kEfhActionA) {
 					handleFight(monsterId);
 					endLoop = true;
 					break;
-				} else if (input == kEfhActionL || input == Efh::kEfhActionESC) {	// Leave
+
+				// Leave
+				} else if (input == kEfhActionL || input == Efh::kEfhActionESC) {
 					endLoop = true;
 					break;
-				} else if (input == kEfhActionS) {	// Status
+
+				// Status
+				} else if (input == Efh::kEfhActionS) {
 					handleStatusMenu(1, _teamChar[0]._id);
 					endLoop = true;
 					_tempTextPtr = nullptr;
 					drawGameScreenAndTempText(true);
 					break;
-				} else if (input == kEfhActionT) {	// Talk
+
+				// Talk
+				} else if (input == Efh::kEfhActionT) {
 					startTalkMenu(monsterId);
 					endLoop = true;
 					break;
