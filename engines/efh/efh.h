@@ -68,28 +68,28 @@ enum EfhDebugChannels {
 
 // Lists of custom key actions within the EFH game engine itself.
 enum EfhAction {
-	kEfhActionUp = 273, // default <KEYCODE_UP> or <KEYCODE_KP8>
-    kEfhActionUpLeft = 278,    // default <KEYCODE_KP7>
-    kEfhActionUpRight = 280,   // default <KEYCODE_KP9>
-    kEfhActionDown = 274,  // default <KEYCODE_DOWN> or <KEYCODE_KP2>
-    kEfhActionDownLeft = 279,  // default <KEYCODE_KP1>
-    kEfhActionDownRight = 281, // default <KEYCODE_KP3>
-    kEfhActionLeft = 276,  // default <KEYCODE_LEFT> or <KEYCODE_KP4>
-    kEfhActionRight = 275, // default <KEYCODE_RIGHT> or <KEYCODE_KP6>
-    kEfhActionCharacterSummaryOne = 282,   // default <F1> or <1>
-    kEfhActionCharacterSummaryTwo = 283,   // default <F2> or <2>
-    kEfhActionCharacterSummaryThree = 284, // default <F3> or <3>
-    kEfhActionSave = 286,  // default <F5>
-    kEfhActionLoad = 228,  // default <F7>
-    kEfhActionA = 97,    // default <A>
-    kEfhActionH = 104,    // default <H>
-    kEfhActionD = 100,    // default <D>
-    kEfhActionS = 115,    // default <S>
-    kEfhActionR = 114,    // default <R>
-    kEfhActionC = 99,    // default <C>
-    kEfhActionT = 116,    // default <T>
-    kEfhActionL = 108,    // default <L>
-    kEfhActionESC =  27  // default <Esc>
+	kEfhActionUp = 273,
+	kEfhActionUpLeft = 278,
+	kEfhActionUpRight = 280,
+	kEfhActionDown = 274,
+	kEfhActionDownLeft = 279,
+	kEfhActionDownRight = 281,
+	kEfhActionLeft = 276,
+	kEfhActionRight = 275,
+	kEfhActionCharacterSummaryOne = 282,
+	kEfhActionCharacterSummaryTwo = 283,
+	kEfhActionCharacterSummaryThree = 284,
+	kEfhActionSave = 286,
+	kEfhActionLoad = 228,
+	kEfhActionAttack = 97,
+	kEfhActionHide = 104,
+	kEfhActionDefend = 100,
+	kEfhActionStatus = 115,
+	kEfhActionRun = 114,
+	kEfhActionCombat = 99,
+	kEfhActionTalk = 116,
+	kEfhActionLeave = 108,
+	kEfhActionESC =  27
 };
 
 class EfhGraphicsStruct {
